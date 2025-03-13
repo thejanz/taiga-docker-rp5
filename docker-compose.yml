@@ -38,7 +38,9 @@ x-volumes:
 
 services:
   taiga-db:
-    image: postgres:12.3
+    image: arm64v8/postgres
+    security_opt:
+      - label=disable
     environment:
       POSTGRES_DB: "taiga"
       POSTGRES_USER: "${POSTGRES_USER}"
@@ -55,7 +57,8 @@ services:
       - taiga
 
   taiga-back:
-    image: taigaio/taiga-back:latest
+    image: jjanz4/taiga-back
+    platform: linux/amd64
     environment: *default-back-environment
     volumes: *default-back-volumes
     networks:
@@ -69,7 +72,8 @@ services:
         condition: service_started
 
   taiga-async:
-    image: taigaio/taiga-back:latest
+    image: jjanz4/taiga-back
+    platform: linux/amd64
     entrypoint: ["/taiga-back/docker/async_entrypoint.sh"]
     environment: *default-back-environment
     volumes: *default-back-volumes
@@ -85,6 +89,7 @@ services:
 
   taiga-async-rabbitmq:
     image: rabbitmq:3.8-management-alpine
+    platform: linux/amd64
     environment:
       RABBITMQ_ERLANG_COOKIE: "${RABBITMQ_ERLANG_COOKIE}"
       RABBITMQ_DEFAULT_USER: "${RABBITMQ_USER}"
@@ -97,7 +102,8 @@ services:
       - taiga
 
   taiga-front:
-    image: taigaio/taiga-front:latest
+    image: jjanz4/taiga-front
+    platform: linux/amd64
     environment:
       TAIGA_URL: "${TAIGA_SCHEME}://${TAIGA_DOMAIN}"
       TAIGA_WEBSOCKETS_URL: "${WEBSOCKETS_SCHEME}://${TAIGA_DOMAIN}"
@@ -109,7 +115,8 @@ services:
     #   - ./conf.json:/usr/share/nginx/html/conf.json
 
   taiga-events:
-    image: taigaio/taiga-events:latest
+    image: jjanz4/taiga-events
+    platform: linux/amd64
     environment:
       RABBITMQ_USER: "${RABBITMQ_USER}"
       RABBITMQ_PASS: "${RABBITMQ_PASS}"
@@ -122,6 +129,7 @@ services:
 
   taiga-events-rabbitmq:
     image: rabbitmq:3.8-management-alpine
+    platform: linux/amd64
     environment:
       RABBITMQ_ERLANG_COOKIE: "${RABBITMQ_ERLANG_COOKIE}"
       RABBITMQ_DEFAULT_USER: "${RABBITMQ_USER}"
@@ -134,7 +142,8 @@ services:
       - taiga
 
   taiga-protected:
-    image: taigaio/taiga-protected:latest
+    image: jjanz4/taiga-protected
+    platform: linux/amd64
     environment:
       MAX_AGE: "${ATTACHMENTS_MAX_AGE}"
       SECRET_KEY: "${SECRET_KEY}"
@@ -143,6 +152,7 @@ services:
 
   taiga-gateway:
     image: nginx:1.19-alpine
+    platform: linux/amd64
     ports:
       - "9000:80"
     volumes:
