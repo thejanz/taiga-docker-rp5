@@ -57,7 +57,7 @@ services:
       - taiga
 
   taiga-back:
-    image: jjanz4/taiga-back
+    image: jjanz4/taiga-back:6.8.0
     platform: linux/amd64
     environment: *default-back-environment
     volumes: *default-back-volumes
@@ -72,7 +72,7 @@ services:
         condition: service_started
 
   taiga-async:
-    image: jjanz4/taiga-back
+    image: jjanz4/taiga-back:6.8.0
     platform: linux/amd64
     entrypoint: ["/taiga-back/docker/async_entrypoint.sh"]
     environment: *default-back-environment
@@ -102,7 +102,7 @@ services:
       - taiga
 
   taiga-front:
-    image: jjanz4/taiga-front
+    image: jjanz4/taiga-front:6.8.0
     platform: linux/amd64
     environment:
       TAIGA_URL: "${TAIGA_SCHEME}://${TAIGA_DOMAIN}"
@@ -115,7 +115,7 @@ services:
     #   - ./conf.json:/usr/share/nginx/html/conf.json
 
   taiga-events:
-    image: jjanz4/taiga-events
+    image: jjanz4/taiga-events:6.8.0
     platform: linux/amd64
     environment:
       RABBITMQ_USER: "${RABBITMQ_USER}"
@@ -142,7 +142,7 @@ services:
       - taiga
 
   taiga-protected:
-    image: jjanz4/taiga-protected
+    image: jjanz4/taiga-protected:6.8.0
     platform: linux/amd64
     environment:
       MAX_AGE: "${ATTACHMENTS_MAX_AGE}"
